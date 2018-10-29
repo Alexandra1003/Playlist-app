@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {getTracks} from './actions/tracks';
+import { getTracks } from './actions/tracks';
 import './App.css';
+import Menu from './Menu';
+import { Link } from 'react-router-dom';
 
 class App extends Component {
   addTrack() {
@@ -10,13 +12,13 @@ class App extends Component {
   }
 
   findTrack() {
-    console.log('find track', this.searchInput.value);
     this.props.onFindTrack(this.searchInput.value);
   }
 
   render() {
     return (
       <div>
+        <Menu />
         <div>
           <input type="text" ref={(input) => { this.trackInput = input }} />
           <button onClick={this.addTrack.bind(this)}>Add Track</button>
@@ -31,7 +33,9 @@ class App extends Component {
         <ul>
           {this.props.tracks.map((track, index) => {
             return (
-              <li key={index}>{track.name}</li>
+              <li key={index}>
+                <Link to={`/tracks/${track.id}`}> {track.name} </Link >
+              </li>
             )
           }
           )}
@@ -54,7 +58,7 @@ export default connect(
       dispatch({ type: 'ADD_TRACK', payload });
     },
     onFindTrack: (name) => {
-      dispatch({type: 'FIND_TRACK', payload: name});
+      dispatch({ type: 'FIND_TRACK', payload: name });
     },
     onGetTracks: () => {
       dispatch(getTracks());
